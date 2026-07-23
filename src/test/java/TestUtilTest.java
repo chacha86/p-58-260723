@@ -37,13 +37,16 @@ public class TestUtilTest {
         ByteArrayOutputStream outputStream = TestUtil.setOutToByteArray(); // 모니터 => 배열
 
         System.out.println("1 / 이순신 / 나의 죽음을 적에게 알리지 마라");
+//        System.out.print(123);
+
+        // 개발자 -> 숫자로 가져와, 문자로 가져와
 
         String outStr = outputStream.toString();
 
         TestUtil.clearSetOutToByteArray(outputStream); // 배열 => 모니터
 
         assertThat(outStr).isEqualTo("1 / 이순신 / 나의 죽음을 적에게 알리지 마라\n");
-
+//        assertThat(outStr).contains("1 / 이순신 / 나의 죽음을 적에게 알리지 마라");
 
         System.out.println("이제 화면에 출력됩니다.");
 
