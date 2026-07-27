@@ -13,12 +13,12 @@ public class UtilFileTest {
     // @BeforeEach, @AfterEach => 각각의 테스트 케이스 전후 처리
     @BeforeAll
     static void beforeAll() {
-        Util.file.mkdir("temp");
+        com.back.standard.Util.file.mkdir("temp");
     }
 
     @AfterAll
     static void afterAll() {
-        Util.file.rmdir("temp");
+        com.back.standard.Util.file.rmdir("temp");
     }
 
     @Test
@@ -29,10 +29,10 @@ public class UtilFileTest {
         String filePath = "test.txt";
 
         // 수행하면 (when)
-        Util.file.touch(filePath);
+        com.back.standard.Util.file.touch(filePath);
 
         // 결과가 나온다. => 실제 파일이 존재하는가? (then)
-        boolean rst = Util.file.exists(filePath);
+        boolean rst = com.back.standard.Util.file.exists(filePath);
 
         assertThat(rst).isTrue();
 
@@ -46,13 +46,13 @@ public class UtilFileTest {
 
         // given
         String filePath = "test.txt";
-        Util.file.touch(filePath); // 파일 생성
+        com.back.standard.Util.file.touch(filePath); // 파일 생성
 
         // when
-        Util.file.delete(filePath);
+        com.back.standard.Util.file.delete(filePath);
 
         // then
-        boolean rst = Util.file.exists(filePath);
+        boolean rst = com.back.standard.Util.file.exists(filePath);
         assertThat(rst).isFalse();
 
     }
@@ -63,15 +63,15 @@ public class UtilFileTest {
 
         // given
         String filePath = "test.txt";
-        Util.file.set(filePath, "sdfsdf"); // 파일 쓰기
+        com.back.standard.Util.file.set(filePath, "sdfsdf"); // 파일 쓰기
 
         // when
-        String content = Util.file.get(filePath, "");
+        String content = com.back.standard.Util.file.get(filePath, "");
 
         // then
         assertThat(content).isEqualTo("hello world");
 
-        Util.file.delete(filePath);
+        com.back.standard.Util.file.delete(filePath);
     }
 
 

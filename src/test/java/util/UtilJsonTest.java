@@ -21,7 +21,7 @@ public class UtilJsonTest {
         map.put("age", 20);
 
         // when
-        String jsonStr = Util.json.toString(map);
+        String jsonStr = com.back.standard.Util.json.toString(map);
 
         // then
         assertThat(jsonStr).isEqualTo(
@@ -47,7 +47,7 @@ public class UtilJsonTest {
                 }""";
 
         // when
-        Map<String, Object> map = Util.json.toMap(jsonStr);
+        Map<String, Object> map = com.back.standard.Util.json.toMap(jsonStr);
 
         // then
         assertThat(map)
