@@ -7,6 +7,20 @@ import java.util.Map;
 
 public class WiseSayingFileRepository {
 
+    private static final String DB_PATH = "db/wiseSaying";
+
+    public static void clear() {
+        Util.file.delete(DB_PATH);
+    }
+
+    private String getFilePath(int id) {
+        return DB_PATH + "/%d.json".formatted(id);
+    }
+
+    private String getLastIdPath() {
+        return DB_PATH + "/lastId.txt";
+    }
+
     public WiseSaying save(WiseSaying wiseSaying) {
 
         if(wiseSaying.isNew()) {
@@ -23,8 +37,7 @@ public class WiseSayingFileRepository {
         String jsonStr = Util.json.toString(wiseSayingMap);
 
         // 파일로 생성/저장
-        Util.file.set("db/wiseSaying/%d.json".formatted(wiseSaying.getId()),
-                jsonStr);
+        Util.file.set(getFilePath(wiseSaying.getId()), jsonStr);
 
 
         return wiseSaying;
@@ -44,10 +57,10 @@ public class WiseSayingFileRepository {
     }
 
     private void incrementLastId() {
-        Util.file.set("db/wiseSaying/lastId.txt", String.valueOf(getLastId() + 1));
+        Util.file.set(getLastIdPath(), String.valueOf(getLastId() + 1));
     }
 
     private int getLastId() {
-        return Util.file.getAsInt("db/wiseSaying/lastId.txt", 0);
+        return Util.file.getAsInt(getLastIdPath(), 0);
     }
 }
