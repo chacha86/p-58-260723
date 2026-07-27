@@ -7,6 +7,7 @@ import com.back.global.AppContext;
 import com.back.global.Rq;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -25,12 +26,15 @@ public class WiseSayingController {
 
         int id = rq.getParamAsInt("id", -1);
 
-        WiseSaying wiseSaying = wiseSayingService.findByIdOrNull(id);
+        Optional<WiseSaying> wiseSayingOp = wiseSayingService.findById(id);
 
-        if(wiseSaying == null) {
-            System.out.println("%d번 명언은 존재하지 않습니다.".formatted(id));
+        if(wiseSayingOp.isEmpty()) {
+            System.out.println("없는 번호입니다.");
             return;
         }
+
+        WiseSaying wiseSaying = wiseSayingOp.get();
+//        wiseSaying.getContent(); // wiseSaying이 null이면 컴파일 오류
 
         System.out.println("명언(기존) : %s".formatted(wiseSaying.getContent()));
         String newSaying = sc.nextLine();
