@@ -7,12 +7,13 @@ import java.util.Map;
 
 public class WiseSayingFileRepository {
 
-    private int lastId = 0;
-
     public WiseSaying save(WiseSaying wiseSaying) {
 
         if(wiseSaying.isNew()) {
-            wiseSaying.setId(++lastId);
+
+            incrementLastId();
+            int lastId = getLastId();
+            wiseSaying.setId(lastId);
         }
 
         // wiseSaying -> map
@@ -42,4 +43,11 @@ public class WiseSayingFileRepository {
         return wiseSaying;
     }
 
+    private void incrementLastId() {
+        Util.file.set("db/wiseSaying/lastId.txt", String.valueOf(getLastId() + 1));
+    }
+
+    private int getLastId() {
+        return Util.file.getAsInt("db/wiseSaying/lastId.txt", 0);
+    }
 }
