@@ -25,28 +25,6 @@ public class WiseSayingFileRepository {
         return DB_PATH + "/lastId.txt";
     }
 
-    public WiseSaying save(WiseSaying wiseSaying) {
-
-        if(wiseSaying.isNew()) {
-
-            incrementLastId();
-            int lastId = getLastId();
-            wiseSaying.setId(lastId);
-        }
-
-        // wiseSaying -> map
-        Map<String, Object> wiseSayingMap = wiseSaying.toMap();
-
-        // map -> json
-        String jsonStr = Util.json.toString(wiseSayingMap);
-
-        // 파일로 생성/저장
-        Util.file.set(getFilePath(wiseSaying.getId()), jsonStr);
-
-
-        return wiseSaying;
-    }
-
     public Optional<WiseSaying> findById(int id) {
         String jsonStr = Util.file.get("db/wiseSaying/%d.json".formatted(id), "");
 
@@ -77,6 +55,14 @@ public class WiseSayingFileRepository {
 
         return pageOf(filteredWiseSayings, pageNo, pageSize);
     }
+    public PageDto findByAuthorContainingIdDesc(String kw, int pageSize, int pageNo) {
+        List<WiseSaying> filteredWiseSayings = findAll().stream()
+                .filter(wiseSaying -> wiseSaying.getAuthor().contains(kw))
+                .sorted(Comparator.comparing(WiseSaying::getId).reversed())
+                .toList();
+
+        return pageOf(filteredWiseSayings, pageNo, pageSize);
+    }
 
     private PageDto pageOf(List<WiseSaying> filteredContent, int pageNo, int pageSize) {
 
@@ -89,6 +75,32 @@ public class WiseSayingFileRepository {
         return new PageDto(pageNo, pageSize, totalItems, content);
     }
 
+    private int getLastId() {
+        return Util.file.getAsInt(getLastIdPath(), 0);
+    }
+
+    public WiseSaying save(WiseSaying wiseSaying) {
+
+        if(wiseSaying.isNew()) {
+
+            incrementLastId();
+            int lastId = getLastId();
+            wiseSaying.setId(lastId);
+        }
+
+        // wiseSaying -> map
+        Map<String, Object> wiseSayingMap = wiseSaying.toMap();
+
+        // map -> json
+        String jsonStr = Util.json.toString(wiseSayingMap);
+
+        // 파일로 생성/저장
+        Util.file.set(getFilePath(wiseSaying.getId()), jsonStr);
+
+
+        return wiseSaying;
+    }
+
     public boolean delete(WiseSaying wiseSaying) {
         return Util.file.delete(getFilePath(wiseSaying.getId()));
     }
@@ -97,7 +109,5 @@ public class WiseSayingFileRepository {
         Util.file.set(getLastIdPath(), String.valueOf(getLastId() + 1));
     }
 
-    private int getLastId() {
-        return Util.file.getAsInt(getLastIdPath(), 0);
-    }
+
 }
