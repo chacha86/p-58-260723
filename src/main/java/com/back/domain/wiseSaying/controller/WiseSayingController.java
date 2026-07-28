@@ -29,7 +29,7 @@ public class WiseSayingController {
         Optional<WiseSaying> wiseSayingOp = wiseSayingService.findById(id);
 
         if(wiseSayingOp.isEmpty()) {
-            System.out.println("없는 번호입니다.");
+            System.out.println("%d번 명언은 존재하지 않습니다.".formatted(id));
             return;
         }
 

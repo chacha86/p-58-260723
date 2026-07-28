@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public class WiseSayingFileRepository {
+public class WiseSayingFileRepository implements WiseSayingRepository {
 
     private static final String DB_PATH = "db/wiseSaying";
 
@@ -44,6 +44,11 @@ public class WiseSayingFileRepository {
                 .map(Util.json::toMap)
                 .map(WiseSaying::fromMap)
                 .toList();
+    }
+
+    @Override
+    public List<WiseSaying> findListDesc() {
+        return findAll().reversed();
     }
 
     public PageDto findByContentContainingIdDesc(String kw, int pageSize, int pageNo) {
@@ -112,6 +117,16 @@ public class WiseSayingFileRepository {
 
     public boolean delete(WiseSaying wiseSaying) {
         return Util.file.delete(getFilePath(wiseSaying.getId()));
+    }
+
+    public boolean delete(int id) {
+        Optional<WiseSaying> wiseSayingOp = findById(id);
+        if(wiseSayingOp.isEmpty()) {
+            return false;
+        }
+
+        Util.file.delete(getFilePath(wiseSayingOp.get().getId()));
+        return true;
     }
 
     private void incrementLastId() {
